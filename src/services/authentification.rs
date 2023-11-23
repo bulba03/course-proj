@@ -21,7 +21,7 @@ async fn auth(state: Data<AppState>, credentials: BasicAuth) -> impl Responder {
     match _password {
         None => HttpResponse::BadRequest().json("No password provided"),
         Some(_password) => {
-            let msg = crate::messages::create_user::AuthUser{
+            let msg = crate::messages::auth_user::AuthUser{
                 email: username.to_string(),
                 pass: _password.to_string(),
             };

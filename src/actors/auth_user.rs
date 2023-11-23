@@ -1,6 +1,6 @@
 use actix::Handler;
 use diesel::{QueryResult, RunQueryDsl, QueryDsl, ExpressionMethods};
-use crate::{DbActor, messages::create_user::AuthUser, db_model::user::User, schema::users::dsl::*};
+use crate::{DbActor, messages::auth_user::AuthUser, db_model::user::User, schema::users::dsl::*};
 
 impl Handler<AuthUser> for DbActor {
     type Result = QueryResult<User>;

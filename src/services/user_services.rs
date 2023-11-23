@@ -1,4 +1,4 @@
-use std::env;
+
 
 use crate::{AppState,DbActor, DEFAULT_COST, messages::create_user::CreateUser};
 

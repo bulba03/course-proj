@@ -1,5 +1,5 @@
 use actix::Message;
-use serde::Serialize;
+
 use diesel::QueryResult;
 use crate::db_model::user::User;
 #[derive(Message)]

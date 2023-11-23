@@ -1,12 +1,12 @@
 use actix::SyncArbiter;
-use actix_web::dev::{ServiceRequest, Service};
+use actix_web::dev::{ServiceRequest};
 use actix_web::web::Data;
-use actix_web::{App, HttpServer, web, HttpMessage, Error};
+use actix_web::{App, HttpServer, HttpMessage, Error};
 use actix_web_httpauth::extractors::AuthenticationError;
 use actix_web_httpauth::extractors::bearer::{BearerAuth, self};
 use actix_web_httpauth::middleware::HttpAuthentication;
 use diesel::pg::{PgConnection};
-use diesel::r2d2::{self, ConnectionManager, Pool};
+use diesel::r2d2::{ConnectionManager, Pool};
 use dotenv::dotenv;
 use hmac::{Hmac, Mac};
 use jwt::VerifyWithKey;
@@ -58,7 +58,7 @@ async fn main() -> std::io::Result<()> {
     let db_addr = SyncArbiter::start(5, move || DbActor(pool.clone()));
     // Запускаем HTTP-сервер
     HttpServer::new(move || {
-        let bearer_middleware = HttpAuthentication::bearer(validator);
+        let _bearer_middleware = HttpAuthentication::bearer(validator);
         App::new()
         .app_data(Data::new(AppState {db: db_addr.clone()})).service(auth).service(create_user)
         

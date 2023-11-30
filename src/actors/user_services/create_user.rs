@@ -2,7 +2,7 @@
 
 use actix::Handler;
 use diesel::{QueryResult, RunQueryDsl};
-use crate::{DbActor, messages::create_user::CreateUser, db_model::user::User, schema::users::dsl::*, insertables::{self, new_user::RoleEnum}};
+use crate::{DbActor, messages::user_services::create_user::CreateUser, db_model::user::User, schema::users::dsl::*, insertables::{self, new_user::RoleEnum}};
 
 impl Handler<CreateUser> for DbActor {
     type Result = QueryResult<User>;

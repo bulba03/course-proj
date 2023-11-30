@@ -1,3 +1,1 @@
-pub mod create_user;
-pub mod auth_user;
-pub mod change_pass;
+pub mod user_services;

@@ -1,18 +1,18 @@
 use actix::SyncArbiter;
-use actix_web::dev::{ServiceRequest};
-use actix_web::web::Data;
+use actix_web::dev::ServiceRequest;
+use actix_web::web::{Data, self};
 use actix_web::{App, HttpServer, HttpMessage, Error};
 use actix_web_httpauth::extractors::AuthenticationError;
 use actix_web_httpauth::extractors::bearer::{BearerAuth, self};
 use actix_web_httpauth::middleware::HttpAuthentication;
-use diesel::pg::{PgConnection};
+use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
 use dotenv::dotenv;
 use hmac::{Hmac, Mac};
 use jwt::VerifyWithKey;
 use serde::{Serialize, Deserialize};
 use services::authentification::auth;
-use services::user_services::create_user;
+use services::user_services::{create_user, self};
 use sha2::Sha256;
 use std::env;
 mod db_utils;
@@ -60,7 +60,11 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         let _bearer_middleware = HttpAuthentication::bearer(validator);
         App::new()
-        .app_data(Data::new(AppState {db: db_addr.clone()})).service(auth).service(create_user)
+        .app_data(Data::new(AppState {db: db_addr.clone()}))
+        .service(auth)
+        .service(create_user)
+        .service(web::scope("").wrap(_bearer_middleware).service(user_services::change_password))
+
         
     })
     .bind("127.0.0.1:8080")?

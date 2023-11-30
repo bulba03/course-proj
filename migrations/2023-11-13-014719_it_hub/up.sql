@@ -8,3 +8,24 @@ CREATE TABLE Users (
     password VARCHAR(255) NOT NULL,
     role ROLE_ENUM NOT NULL
 );
+
+CREATE TABLE COURSES (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    start_date DATE,
+    end_date DATE,
+    teacher_id INT,
+    FOREIGN KEY (teacher_id) REFERENCES Users (id)
+);
+
+-- Таблица "Lessons" (Уроки курса)
+CREATE TABLE LESSONS (
+    id SERIAL PRIMARY KEY,
+    course_id INT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    start_time TIME,
+    end_time TIME,
+    FOREIGN KEY (course_id) REFERENCES Courses (id)
+);

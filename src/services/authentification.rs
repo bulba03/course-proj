@@ -1,12 +1,12 @@
 use std::env;
 
-use crate::{AppState, TokenClaims, DEFAULT_COST};
+use crate::{AppState, TokenClaims};
 
 use actix_web::{post, web::Data, HttpResponse, Responder};
 
 use actix_web_httpauth::extractors::basic::BasicAuth;
 
-use bcrypt::{hash,verify};
+use bcrypt::verify;
 use hmac::{Hmac, Mac};
 
 use jwt::SignWithKey;
@@ -19,7 +19,7 @@ async fn auth(state: Data<AppState>, credentials: BasicAuth) -> impl Responder {
     let username = credentials.user_id();
     let _password = credentials.password();
     match _password {
-        None => HttpResponse::BadRequest().json("No password provided"),
+        None => HttpResponse::BadRequest().json("No password providen"),
         Some(_password) => {
             let msg = crate::messages::auth_user::AuthUser{
                 email: username.to_string(),
@@ -27,8 +27,6 @@ async fn auth(state: Data<AppState>, credentials: BasicAuth) -> impl Responder {
             };
             match state.as_ref().db.clone().send(msg).await {
                 Ok(Ok(info)) => {
-                    let new_hash = hash(_password.to_string(), DEFAULT_COST).unwrap();
-                    println!("{}", format!("{:?} {:?}", new_hash, info.password));
                     let is_valid = verify(_password.to_string(), info.password.as_str());
                     match is_valid {
                         Ok(true) => {

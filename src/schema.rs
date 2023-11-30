@@ -7,6 +7,30 @@ pub mod sql_types {
 }
 
 diesel::table! {
+    courses (id) {
+        id -> Int4,
+        #[max_length = 255]
+        name -> Varchar,
+        description -> Nullable<Text>,
+        start_date -> Nullable<Date>,
+        end_date -> Nullable<Date>,
+        teacher_id -> Nullable<Int4>,
+    }
+}
+
+diesel::table! {
+    lessons (id) {
+        id -> Int4,
+        course_id -> Nullable<Int4>,
+        #[max_length = 255]
+        name -> Varchar,
+        description -> Nullable<Text>,
+        start_time -> Nullable<Time>,
+        end_time -> Nullable<Time>,
+    }
+}
+
+diesel::table! {
     use diesel::sql_types::*;
     use super::sql_types::RoleEnum;
 
@@ -23,3 +47,12 @@ diesel::table! {
         role -> RoleEnum,
     }
 }
+
+diesel::joinable!(courses -> users (teacher_id));
+diesel::joinable!(lessons -> courses (course_id));
+
+diesel::allow_tables_to_appear_in_same_query!(
+    courses,
+    lessons,
+    users,
+);

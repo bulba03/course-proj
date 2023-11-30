@@ -63,7 +63,9 @@ async fn main() -> std::io::Result<()> {
         .app_data(Data::new(AppState {db: db_addr.clone()}))
         .service(auth)
         .service(create_user)
-        .service(web::scope("").wrap(_bearer_middleware).service(user_services::change_password))
+        .service(web::scope("")
+                .wrap(_bearer_middleware)
+                .service(user_services::change_password))
 
         
     })

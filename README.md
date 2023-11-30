@@ -2,7 +2,6 @@
 # TODO: 
 1) Think about what is project suppose to do
 2) Think how to store tests
-3) Think how to add roles into token
 4) Create UI for Unity project
 
 
@@ -29,5 +28,15 @@ Creates user, require body with json in format:
   "password": "MyPassIsVerySecret"
 }
 ``` 
-### `POST` AUTH
+### `POST` /auth
 Authentificates user, require basicAuth with username and password. In this case username = email.
+
+### `POST` /user/change_password
+User can change his password by this route, JWT secured route.
+Require body with json in format:
+```json
+{
+  "prev_password": "my_bad_previous_password_that_i_forgot",
+  "new_password": "my_new_cool_pass_that_i_just_will_always_remember"
+}
+```

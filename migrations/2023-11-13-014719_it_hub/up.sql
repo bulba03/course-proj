@@ -27,5 +27,5 @@ CREATE TABLE LESSONS (
     description TEXT,
     start_time TIME,
     end_time TIME,
-    FOREIGN KEY (course_id) REFERENCES Courses (id)
+    FOREIGN KEY (course_id) REFERENCES COURSES (id)
 );

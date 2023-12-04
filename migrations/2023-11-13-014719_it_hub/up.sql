@@ -13,8 +13,6 @@ CREATE TABLE COURSES (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    start_date DATE,
-    end_date DATE,
     teacher_id INT,
     FOREIGN KEY (teacher_id) REFERENCES Users (id)
 );
@@ -25,7 +23,5 @@ CREATE TABLE LESSONS (
     course_id INT,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    start_time TIME,
-    end_time TIME,
     FOREIGN KEY (course_id) REFERENCES COURSES (id)
 );

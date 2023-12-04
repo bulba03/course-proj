@@ -12,8 +12,6 @@ diesel::table! {
         #[max_length = 255]
         name -> Varchar,
         description -> Nullable<Text>,
-        start_date -> Nullable<Date>,
-        end_date -> Nullable<Date>,
         teacher_id -> Nullable<Int4>,
     }
 }
@@ -25,8 +23,6 @@ diesel::table! {
         #[max_length = 255]
         name -> Varchar,
         description -> Nullable<Text>,
-        start_time -> Nullable<Time>,
-        end_time -> Nullable<Time>,
     }
 }
 

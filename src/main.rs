@@ -1,20 +1,20 @@
 use actix::SyncArbiter;
 use actix_web::dev::ServiceRequest;
-use actix_web::web::{Data, self};
+use actix_web::web::Data;
 use actix_web::{App, HttpServer, HttpMessage, Error};
 use actix_web_httpauth::extractors::AuthenticationError;
 use actix_web_httpauth::extractors::bearer::{BearerAuth, self};
 use actix_web_httpauth::middleware::HttpAuthentication;
+
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
 use dotenv::dotenv;
 use hmac::{Hmac, Mac};
 use jwt::VerifyWithKey;
 use serde::{Serialize, Deserialize};
-use services::authentification::auth;
-use services::user_services::{create_user, self};
 use sha2::Sha256;
 use std::env;
+
 mod db_utils;
 mod services;
 mod insertables;
@@ -23,6 +23,7 @@ mod messages;
 mod actors;
 mod db_model;
 use db_utils::{get_pool, AppState, DbActor};
+
 const DEFAULT_COST: u32 = 7;
 #[derive(Serialize, Deserialize, Clone)]
 pub struct TokenClaims {
@@ -50,22 +51,18 @@ pub async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<S
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    // Загружаем переменные окружения из файла `.env`
     dotenv().ok();
 
     let db_url: String = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let pool: Pool<ConnectionManager<PgConnection>> = get_pool(&db_url);
     let db_addr = SyncArbiter::start(5, move || DbActor(pool.clone()));
-    // Запускаем HTTP-сервер
+    // Start HTTP Server
     HttpServer::new(move || {
         let _bearer_middleware = HttpAuthentication::bearer(validator);
         App::new()
         .app_data(Data::new(AppState {db: db_addr.clone()}))
-        .service(auth)
-        .service(create_user)
-        .service(web::scope("")
-                .wrap(_bearer_middleware)
-                .service(user_services::change_password))
+        .configure(services::user_services::config)
+        .configure(services::courses::config)
 
         
     })

@@ -1,6 +1,6 @@
 use actix::Handler;
 use diesel::{QueryResult, RunQueryDsl, QueryDsl, ExpressionMethods, update};
-use crate::{DbActor, messages::change_pass::ChangePass, schema::users::dsl::*, db_model::user::User};
+use crate::{DbActor, messages::user_services::change_pass::ChangePass, schema::users::dsl::*, db_model::user::User};
 
 impl Handler<ChangePass> for DbActor {
     type Result = QueryResult<usize>;

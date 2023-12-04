@@ -17,8 +17,8 @@ pub struct CreateUserBody {
     password: String
 }
 
-#[post("/create")]
-async fn create_user(state: Data<AppState>, body: Json<CreateUserBody>) -> impl Responder {
+#[post("/create_admin")]
+async fn create_admin(state: Data<AppState>, body: Json<CreateUserBody>) -> impl Responder {
     let user: CreateUserBody = body.into_inner();
 
     let hash = hash(user.password, DEFAULT_COST).unwrap();
@@ -28,7 +28,7 @@ async fn create_user(state: Data<AppState>, body: Json<CreateUserBody>) -> impl 
         last_name: user.last_name,
         password: hash,
         email: user.email,
-        role: RoleEnum::User
+        role: RoleEnum::Admin
     };
     match db.send(msg).await {
         Ok(Ok(info)) => HttpResponse::Ok().json(info),

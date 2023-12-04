@@ -62,6 +62,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
         .app_data(Data::new(AppState {db: db_addr.clone()}))
         .configure(services::user_services::config)
+        .configure(services::courses::config)
 
         
     })

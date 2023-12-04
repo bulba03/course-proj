@@ -23,5 +23,6 @@ CREATE TABLE LESSONS (
     course_id INT,
     name VARCHAR(255) NOT NULL,
     description TEXT,
+    resource_link TEXT,
     FOREIGN KEY (course_id) REFERENCES COURSES (id)
 );

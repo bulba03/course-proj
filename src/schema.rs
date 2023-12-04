@@ -19,10 +19,11 @@ diesel::table! {
 diesel::table! {
     lessons (id) {
         id -> Int4,
-        course_id -> Nullable<Int4>,
+        course_id -> Int4,
         #[max_length = 255]
         name -> Varchar,
         description -> Nullable<Text>,
+        resource_link -> Nullable<Text>,
     }
 }
 
